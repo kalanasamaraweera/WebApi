@@ -6,15 +6,12 @@ using System.Data.Entity;
 
 namespace ASPApi
 {
-    public class StudentBasicDetails:DbContext
-    {
-        public DbSet<studentTable> StudentDetails { get; set; }
-
-    }
-    public class studentTable
+    public class StudentBasicDetails
     {
         public int stuID { get; set; }
         public string stuName { get; set; }
         public int stuAge { get; set; }
+
     }
+
 }

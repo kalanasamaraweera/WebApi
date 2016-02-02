@@ -89,6 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DisplayPage.html" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>

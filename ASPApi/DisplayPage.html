@@ -13,6 +13,21 @@
       Student ID:<input type="text" /><input type="button" value="Search" onclick="" />
         <ul id="getStudent"></ul>
     </div>
-
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+<script>
+    var url="Student/getall"
+    $(document).ready(function () {
+        $.getJSON(url).done(function (data) {
+            $.each(data,Function(key,slist){
+                  $('<li>',{text:getall(slist)}).
+        });
+        });
+    });
+    function getall(slist)
+    {
+        return slist.stuid+':$'+
+    }
+    
+</script>
 </body>
 </html>

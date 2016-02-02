@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudentBasicDetails.cs" />
+    <Compile Include="StudentController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

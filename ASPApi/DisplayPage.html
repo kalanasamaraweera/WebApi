@@ -15,22 +15,17 @@
     </div>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
-    var location = 'api/AllStudent';
+    var location = 'api/Student';
     $(document).ready(function () {      
         // Send an AJAX request      
-        $.getJSON(location)
-            .done(function (data) {            
-                // On success, 'data' contains a list of products.            
-                $.each(data, function (key, item) {              
-                    // Add a list item for the product.              
-                    $('<li>', { text: StuData(item) }).appendTo($('#AllStudent'));
+        $.getJSON(location,function (data) {
+                $.each(data, function (i, val)
+                {
+                    alert(val.stuID);
                 });
-            });
+        });
     });
- function StuData(item)
-    {
-     return item.stuID + ':$' + item.stuName + ':$' + item.stuAge
-    }
+
 </script>
 </body>
 </html>

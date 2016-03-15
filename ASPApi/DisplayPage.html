@@ -10,8 +10,8 @@
         <ul id="AllStudent"/>
     </div>
     <div>
-      Student ID:<input type="text" /><input type="button" value="Search" onclick="" />
-        <ul id="getStudent"></ul>
+      Student ID:<input id="GetId" type="text" /><input type="button" value="Search" onclick="GetStu();" />
+        <p id="getStudent"></p>
     </div>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
@@ -19,11 +19,27 @@
     $(document).ready(function () {
         $.get(link).done(function (data) {
             $.each(data, function (i, val) {
-                $("#AllStudent").append("<li>Name: "+val.stuName+" Student Age: "+val.stuAge+"</li>")
+                $("#AllStudent").append("<li>Name: "+val.stuName+" Age: "+val.stuAge+"</li>")
             });
         });
-        
+       
     });
+    function GetVal(studet)
+    {
+        return "Name: "+studet.stuName + " , Age: " + studet.stuAge
+    }
+    function GetStu()
+    {
+        var stuid = $("#GetId").val();
+        
+        $.getJSON(link + '/' + stuid).done(function (data) {
+            $("#getStudent").text( GetVal(data) )
+        }).fail(function () {
+            alert("data not found");
+        });
+
+
+    }
 </script>
 </body>
 </html>

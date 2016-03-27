@@ -3,42 +3,172 @@
 <head>
     <title></title>
 	<meta charset="utf-8" />
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <div>
+    <div id="AllStudentDetail">
         <h4>All Student List</h4>
-        <ul id="AllStudent"/>
+
+        <table id="StudentTable" >
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Edit</th>
+                <th>view</th>
+            </tr>
+        </table>
     </div>
     <div>
       Student ID:<input id="GetId" type="text" /><input type="button" value="Search" onclick="GetStu();" />
         <p id="getStudent"></p>
     </div>
+    <div id="Sview">
+        <p id="Sdata"></p>
+    </div>
+    <div id="SEdit">
+        <p id="datas">
+            <label id="Lid" class="Sedit"> Id</label>
+            <input type="text" id="Id" class="Sedit" />
+            <label id="LName" class="Sedit"> Name</label>
+            <input type="text" id="name"class="Sedit"/>
+            <label id="LAge" class="Sedit"> Age</label>
+            <input type="text" id="Age" class="Sedit"/>
+            <input type="button" id="Submit" class="Sedit" value="Add / Update"/>
+        </p>
+    </div>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
-    var link = 'api/Student';
+    var link = 'api/StudentBasicDetails';
+    
     $(document).ready(function () {
+        $(".Sedit").show()
+        $("#Submit").attr("onClick", "DAdd()")
+       view()
+    });
+    function view()
+    {
         $.get(link).done(function (data) {
             $.each(data, function (i, val) {
-                $("#AllStudent").append("<li>Name: "+val.stuName+" Age: "+val.stuAge+"</li>")
+                $("#StudentTable").append('<tr><td>' + val.stuName + '</td><td>' + val.stuAge + '</td><td><input type=button id=' + val.stuID + ' value="Edit" onClick=SEdit(this);></td><td><input type=button id=' + val.stuID + ' value="View" onClick=SView(this);> </td><td><input type=button id=' + val.stuID + '  value="Delete" onClick=Ddelete(this);> </td></tr>')
+
             });
         });
-       
-    });
+    }
+    function SEdit(Edval)
+    {
+        $("Sedit").hide()
+        $.getJSON(link + '/' + Edval.id).done(function (data) {
+            $(".Sedit").show()
+            $("#Id").attr("value", data.stuID)
+            $("#name").attr("value", data.stuName)
+            $("#Age").attr("value", data.stuAge)
+            $("#Submit").attr("onclick", "update()")
+        });
+    }
+    function update()
+    {
+        var studet = {
+            stuID: $("#Id").val(),
+            stuName: $("#name").val(),
+            stuAge: $("#Age").val(),
+        }
+        $.ajax({
+            url: link + '/'+studet.stuID,
+            type: 'PUT',
+            datatype: 'JSON',
+            data: JSON.stringify(studet),
+            contentType: "application/json",
+            success: function (data) {
+                $("#Id").attr("value", "")
+                $("#name").attr("value", "")
+                $("#Age").attr("value", "")
+                alert("dataupdated");
+                location.reload();
+            },
+            fail: function () {
+
+                alert("data update Failed!!!")
+            }
+        });
+    }
+    function SView(VVal)
+    {
+        $.getJSON(link + '/' + VVal.id).done(function (data) {
+            $("#Sdata").text(GetVal(data))
+        });
+    }
     function GetVal(studet)
     {
-        return "Name: "+studet.stuName + " , Age: " + studet.stuAge
+        return "ID: "+studet.stuID+" , Name: "+studet.stuName + " , Age: " + studet.stuAge
     }
-    function GetStu()
+
+    function GetStu(Bvalue)
     {
         var stuid = $("#GetId").val();
         
-        $.getJSON(link + '/' + stuid).done(function (data) {
+        $.getJSON(link + '/'+PostStudentBasicDetails).done(function (data) {
             $("#getStudent").text( GetVal(data) )
         }).fail(function () {
             alert("data not found");
         });
+    }
+    function DAdd()
+    {
+        var studet = {
+            stuID: $("#Id").val(),
+            stuName: $("#name").val(),
+            stuAge: $("#Age").val(),
+        }
+        $.ajax({
+            url: link + '/PostStudentBasicDetails',
+            type: 'POST',
+            datatype: 'JSON',
+            data: JSON.stringify(studet),
+            contentType: "application/json",
+            success: function (data) {
+                $("#Id").attr("value", "")
+                $("#name").attr("value", "")
+                $("#Age").attr("value", "")
+                alert("data insertion successfull");
+                location.reload();
+            },
+            fail: function () {
 
+                alert("data insertion Failed!!!")
+            }
+        });
+   //     $.post(link + '/' + studet).success(function () {
+   //         alert('Data update Successfully');
+   //     }).fail(function () {
+   //         alert('Data updation failed');
+   //     });
+    }
+    function Ddelete(Dval)
+    {
+        $.ajax({
+            url: link + '/' + Dval.id,
+            type: 'Delete',
+            datatype: 'JSON',
+            contentType: "application/json",
+            success: function (data) {
+                alert("data Deleted successfully!!!")
+                location.reload();
+            },
+            fail: function () {
 
+                alert("Deletion Failed!!!")
+            }
+        });
     }
 </script>
 </body>

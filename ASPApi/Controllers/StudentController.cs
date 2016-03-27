@@ -33,5 +33,9 @@ namespace ASPApi
             }
             return Json(studet);
         }
+        public void update(StudentBasicDetails stds)
+        {
+        
+        }
     }
 }
